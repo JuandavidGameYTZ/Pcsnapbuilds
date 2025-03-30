@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="icon" href="InconoPC.png" type="image/png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agregar Producto - PCsnapBuild</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Se usa SweetAlert2 para mensajes (opcional) -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="Pcsnapbuildlogo.png" alt="PCsnapBuild Logo" class="logo">
+    </div>
+    <h1>Agregar Producto</h1>
+    <nav>
+      <ul>
+        <li><a href="marketplace.html">Volver al Marketplace</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section id="agregar-producto" class="container">
+      <h2>Detalles del Producto</h2>
+      <form id="product-form" class="form">
+        <input type="text" id="product-name" placeholder="Nombre del Producto" required>
+        <input type="number" id="product-price" placeholder="Precio del Producto" required>
+        <textarea id="product-description" placeholder="Descripción del Producto" required></textarea>
+        <input type="text" id="product-image" placeholder="URL de la Imagen del Producto (opcional)">
+        <input type="number" id="product-quantity" placeholder="Cantidad Disponible" required>
+        <input type="text" id="product-variants" placeholder="Variantes del Producto (opcional)">
+        <select id="product-category" required>
+          <option value="">Selecciona Categoría</option>
+          <option value="Electrónica">Electrónica</option>
+          <option value="Accesorios">Accesorios</option>
+          <option value="Componentes">Componentes</option>
+        </select>
+        <button type="submit" class="btn-submit">Agregar Producto</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 PCsnapBuild. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    // Función para agregar el producto
+    document.getElementById('product-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      const name = document.getElementById('product-name').value;
+      const price = document.getElementById('product-price').value;
+      const description = document.getElementById('product-description').value;
+      const image = document.getElementById('product-image').value || '';
+      const quantity = document.getElementById('product-quantity').value;
+      const variants = document.getElementById('product-variants').value || '';
+      const category = document.getElementById('product-category').value;
+
+      const product = { name, price, description, image, quantity, variants, category };
+
+      try {
+        const response = await fetch('http://localhost:3000/api/products', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(product)
+        });
+
+        if (response.ok) {
+          // Usamos sessionStorage para enviar un mensaje de éxito
+          sessionStorage.setItem('productAdded', 'true');
+          window.location.href = 'marketplace.html';
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Hubo un error al agregar el producto'
+          });
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Hubo un error al conectar con el servidor'
+        });
+      }
+    });
+  </script>
+</body>
+</html>
+

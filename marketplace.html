@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="icon" href="InconoPC.png" type="image/png">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PCsnapBuild - Marketplace</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Se usa SweetAlert2 para mensajes bonitos (opcional) -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <header>
+    <div class="logo-container">
+      <img src="Pcsnapbuildlogo.png" alt="PCsnapBuild Logo" class="logo">
+    </div>
+    <h1>Marketplace</h1>
+    <nav>
+      <ul>
+        <li><a href="index.html">Volver al inicio</a></li>
+        <li><a href="agregar-producto.html">Vender Productos</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Mensaje de éxito personalizado -->
+    <div id="success-message" class="message"></div>
+    
+    <section id="productos">
+      <h2>Productos Disponibles</h2>
+      <div id="product-list"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 PCsnapBuild. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    // Mostrar mensaje de éxito si está en sessionStorage
+    document.addEventListener("DOMContentLoaded", () => {
+      if(sessionStorage.getItem('productAdded') === 'true'){
+        showMessage('Producto agregado exitosamente');
+        sessionStorage.removeItem('productAdded');
+      }
+      loadProducts();
+    });
+
+    // Función para mostrar mensajes personalizados
+    function showMessage(text) {
+      const messageBox = document.getElementById('success-message');
+      messageBox.textContent = text;
+      messageBox.classList.add('show');
+      setTimeout(() => {
+        messageBox.classList.remove('show');
+      }, 3000);
+    }
+
+    // Función para cargar productos desde la API
+    async function loadProducts() {
+      try {
+        const response = await fetch('http://localhost:3000/api/products');
+        const products = await response.json();
+        const productList = document.getElementById('product-list');
+        productList.innerHTML = '';
+  
+        products.forEach(product => {
+          const productElement = document.createElement('div');
+          productElement.classList.add('producto');
+          productElement.innerHTML = `
+            <span class="remove-btn" onclick="removeProduct('${product._id}', this)">X</span>
+            <img src="${product.image || 'default-product-image.jpg'}" alt="${product.name}" class="product-image">
+            <h3>${product.name}</h3>
+            <p>${product.description}</p>
+            <p class="price">$${product.price}</p>
+            <button class="btn-buy">Comprar</button>
+          `;
+          productList.appendChild(productElement);
+        });
+      } catch (error) {
+        console.error('Error al cargar productos:', error);
+      }
+    }
+
+    // Función para eliminar un producto
+    async function removeProduct(productId, btnElement) {
+      if(confirm('¿Seguro que deseas eliminar este producto?')){
+        try {
+          const response = await fetch(`http://localhost:3000/api/products/${productId}`, {
+            method: 'DELETE'
+          });
+          if(response.ok){
+            // Remover el producto de la lista
+            btnElement.parentElement.remove();
+            showMessage('Producto eliminado');
+          } else {
+            alert('Error al eliminar el producto');
+          }
+        } catch (error) {
+          alert('Error al eliminar el producto');
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+  
