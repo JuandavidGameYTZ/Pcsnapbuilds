@@ -1,10 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');  // Importar path
 
 const app = express();
 app.use(express.json());
 app.use(cors()); // Permite peticiones del frontend
+
+// Servir archivos estáticos desde la carpeta actual (raíz)
+app.use(express.static(path.join(__dirname)));
 
 // Conectar a MongoDB (Asegúrate de que MongoDB esté corriendo)
 mongoose.connect('mongodb://localhost:27017/pcsnapbuild', {
@@ -69,13 +73,12 @@ app.delete('/api/products/:id', async (req, res) => {
   }
 });
 
-// Ruta raíz para verificar si el servidor está funcionando
+// Ruta para la página principal (index.html)
 app.get('/', (req, res) => {
-  res.send('API de PCsnapBuild funcionando correctamente');
+  res.sendFile(path.join(__dirname, 'index.html'));  // Sirve el archivo HTML
 });
 
 // Iniciar el servidor en el puerto 3000
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+app.listen(3000, () => {
+  console.log('Servidor corriendo en http://localhost:3000');
 });
