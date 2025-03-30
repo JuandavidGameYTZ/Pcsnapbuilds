@@ -1,14 +1,14 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const path = require('path');  // Importar path
+const path = require('path');  // Asegúrate de que 'path' esté importado para manejar rutas
 
 const app = express();
 app.use(express.json());
 app.use(cors()); // Permite peticiones del frontend
 
-// Servir archivos estáticos desde la carpeta actual (raíz)
-app.use(express.static(path.join(__dirname)));
+// Servir archivos estáticos (CSS, JS, imágenes) desde la raíz del proyecto
+app.use(express.static(path.join(__dirname)));  // Sirve los archivos estáticos
 
 // Conectar a MongoDB (Asegúrate de que MongoDB esté corriendo)
 mongoose.connect('mongodb://localhost:27017/pcsnapbuild', {
