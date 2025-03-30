@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const path = require('path');  // Asegúrate de que 'path' esté importado para manejar rutas
+const path = require('path');
+const Product = require('./Product');  // Asegúrate de tener el modelo Product.js
 
 const app = express();
 app.use(express.json());
-app.use(cors()); // Permite peticiones del frontend
+app.use(cors());  // Permite peticiones del frontend
 
 // Servir archivos estáticos (CSS, JS, imágenes) desde la raíz del proyecto
 app.use(express.static(path.join(__dirname)));  // Sirve los archivos estáticos
@@ -17,15 +18,18 @@ mongoose.connect('mongodb://localhost:27017/pcsnapbuild', {
 }).then(() => console.log('Conectado a la base de datos'))
   .catch(err => console.error('Error al conectar a MongoDB', err));
 
-// Definir el modelo de productos
-const ProductSchema = new mongoose.Schema({
+// Modelo de Producto (asegúrate de tener este archivo en tu proyecto)
+const productSchema = new mongoose.Schema({
   name: String,
   price: Number,
   description: String,
-  image: { type: String, default: 'https://example.com/default-image.jpg' } // Imagen por defecto
+  image: String,
+  quantity: Number,
+  variants: String,
+  category: String
 });
 
-const Product = mongoose.model('Product', ProductSchema);
+const Product = mongoose.model('Product', productSchema);
 
 // Ruta para obtener todos los productos
 app.get('/api/products', async (req, res) => {
@@ -33,26 +37,31 @@ app.get('/api/products', async (req, res) => {
     const products = await Product.find();
     res.json(products);
   } catch (error) {
-    res.status(500).json({ message: 'Error al obtener los productos' });
+    console.error('Error al obtener productos:', error);
+    res.status(500).json({ message: 'Error al obtener productos' });
   }
 });
 
 // Ruta para agregar un producto
 app.post('/api/products', async (req, res) => {
-  const { name, price, description, image } = req.body;
+  const { name, price, description, image, quantity, variants, category } = req.body;
+
+  const newProduct = new Product({
+    name,
+    price,
+    description,
+    image,
+    quantity,
+    variants,
+    category
+  });
 
   try {
-    const newProduct = new Product({
-      name,
-      price,
-      description,
-      image: image || 'https://example.com/default-image.jpg' // Imagen por defecto si no se proporciona
-    });
-
     await newProduct.save();
-    res.status(201).json(newProduct);  // Devuelve el producto recién creado
+    res.status(201).json(newProduct);
   } catch (error) {
-    res.status(400).json({ message: 'Error al agregar el producto' });
+    console.error('Error al agregar producto:', error);
+    res.status(500).json({ message: 'Error al agregar producto' });
   }
 });
 
@@ -62,23 +71,19 @@ app.delete('/api/products/:id', async (req, res) => {
 
   try {
     const deletedProduct = await Product.findByIdAndDelete(id);
-
     if (!deletedProduct) {
       return res.status(404).json({ message: 'Producto no encontrado' });
     }
-
-    res.status(200).json({ message: 'Producto eliminado' });
+    res.status(200).json({ message: 'Producto eliminado correctamente' });
   } catch (error) {
-    res.status(500).json({ message: 'Error al eliminar el producto' });
+    console.error('Error al eliminar producto:', error);
+    res.status(500).json({ message: 'Error al eliminar producto' });
   }
 });
 
-// Ruta para la página principal (index.html)
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));  // Sirve el archivo HTML
+// Escuchar el puerto
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
 
-// Iniciar el servidor en el puerto 3000
-app.listen(3000, () => {
-  console.log('Servidor corriendo en http://localhost:3000');
-});
