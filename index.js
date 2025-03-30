@@ -69,7 +69,13 @@ app.delete('/api/products/:id', async (req, res) => {
   }
 });
 
+// Ruta raíz para verificar si el servidor está funcionando
+app.get('/', (req, res) => {
+  res.send('API de PCsnapBuild funcionando correctamente');
+});
+
 // Iniciar el servidor en el puerto 3000
-app.listen(3000, () => {
-  console.log('Servidor corriendo en http://localhost:3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
