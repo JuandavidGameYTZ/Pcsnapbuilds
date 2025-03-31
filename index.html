@@ -8,45 +8,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<script>
-    document.addEventListener("DOMContentLoaded", checkLogin);
-  
-    function login() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
-  
-        if (username === "admin" && password === "1234") { 
-            localStorage.setItem("loggedInUser", username);
-            checkLogin();
-        } else {
-            alert("Usuario o contraseña incorrectos");
-        }
-    }
-  
-    function logout() {
-        localStorage.removeItem("loggedInUser");
-        checkLogin();
-    }
-  
-    function checkLogin() {
-        const user = localStorage.getItem("loggedInUser");
-        const loginContainer = document.getElementById("login-container");
-        const logoutBtn = document.getElementById("logout-btn");
-        const userInfo = document.getElementById("user-info");
-  
-        if (user) {
-            loginContainer.innerHTML = `<span>Bienvenido, ${user}</span>`;
-            logoutBtn.style.display = "inline-block";
-        } else {
-            loginContainer.innerHTML = `
-                <input type="text" id="username" placeholder="Usuario">
-                <input type="password" id="password" placeholder="Contraseña">
-                <button onclick="login()">Iniciar Sesión</button>
-            `;
-        }
-    }
-  </script>
-  
+
 <body>
     <header>
         <img src="Pcsnapbuildlogo.png" alt="PCsnapBuild Logo" width="500">

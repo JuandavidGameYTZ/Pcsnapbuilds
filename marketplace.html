@@ -9,15 +9,6 @@
     <!-- Se usa SweetAlert2 para mensajes bonitos (opcional) -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-      if (!localStorage.getItem("loggedInUser")) {
-          alert("Debes iniciar sesión para acceder al Marketplace");
-          window.location.href = "index.html";
-      }
-  });
-</script>
-
 <body>
   <header>
     <div class="logo-container">
