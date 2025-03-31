@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="icon" href="InconoPC.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCsnapBuild - Pedido en Proceso</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <img src="Pcsnapbuildlogo.png" alt="PCsnapBuild Logo" width="500">
+        <h1>Pedido en Proceso</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="armado-personalizado.html">Armado Personalizado</a></li>
+                <li><a href="sobre-nosotros.html">Sobre Nosotros</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="pedido">
+            <h2>Tu Configuración Personalizada</h2>
+            <p>Gracias por tu pedido. Estamos procesando tu configuración personalizada.</p>
+
+            <div class="configuracion">
+                <h3>Presupuesto: $<span id="presupuesto-pedido"></span></h3>
+                <p><strong>Procesador:</strong> <span id="procesador-pedido"></span></p>
+                <p><strong>Memoria RAM:</strong> <span id="memoria-pedido"></span></p>
+                <p><strong>Almacenamiento:</strong> <span id="almacenamiento-pedido"></span></p>
+                <p><strong>Tarjeta Gráfica:</strong> <span id="tarjeta-grafica-pedido"></span></p>
+                <p><strong>Envío:</strong> <span id="envio-pedido"></span></p>
+            </div>
+
+            <div id="mensaje-exito">
+                <p>¡Tu configuración ha sido agregada con éxito! El pedido está en proceso. Recibirás un correo cuando sea enviado.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 PCsnapBuild. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Obtener los datos enviados desde el formulario de armado-personalizado.html
+        const urlParams = new URLSearchParams(window.location.search);
+        const presupuesto = urlParams.get('presupuesto');
+        const procesador = urlParams.get('procesador');
+        const memoria = urlParams.get('memoria');
+        const almacenamiento = urlParams.get('almacenamiento');
+        const tarjetaGrafica = urlParams.get('tarjetaGrafica');
+        const envio = urlParams.get('envio');
+
+        // Mostrar los datos en la página
+        document.getElementById('presupuesto-pedido').innerText = presupuesto;
+        document.getElementById('procesador-pedido').innerText = procesador;
+        document.getElementById('memoria-pedido').innerText = memoria;
+        document.getElementById('almacenamiento-pedido').innerText = almacenamiento;
+        document.getElementById('tarjeta-grafica-pedido').innerText = tarjetaGrafica;
+        document.getElementById('envio-pedido').innerText = envio;
+    </script>
+</body>
+</html>

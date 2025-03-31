@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="icon" href="InconoPC.png" type="image/png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCsnapBuild - Armado Personalizado</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places"></script>
+</head>
+<body>
+    <header>
+        <img src="Pcsnapbuildlogo.png" alt="PCsnapBuild Logo" width="500">
+        <h1>Armado Personalizado</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="marketplace.html">Marketplace</a></li>
+                <li><a href="#comparador">Sobre Nosotros</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="armado">
+        <h2>Crea tu Configuración de PC Personalizada</h2>
+        <p>Ingresa tu presupuesto y necesidades para recibir recomendaciones de configuración.</p>
+        <form id="armado-form">
+            <label for="presupuesto">Presupuesto (en $):</label>
+            <input type="number" id="presupuesto" name="presupuesto" required>
+            
+            <label for="necesidades">Necesidades:</label>
+            <textarea id="necesidades" name="necesidades" required></textarea>
+
+            <h3>Componentes:</h3>
+            <label for="procesador">Selecciona Procesador:</label>
+            <select id="procesador" required>
+                <option value="Intel i5">Intel i5</option>
+                <option value="AMD Ryzen 5">AMD Ryzen 5</option>
+                <option value="Intel i7">Intel i7</option>
+                <option value="AMD Ryzen 7">AMD Ryzen 7</option>
+            </select>
+
+            <label for="memoria">Memoria RAM (GB):</label>
+            <select id="memoria" required>
+                <option value="8">8 GB</option>
+                <option value="16">16 GB</option>
+                <option value="32">32 GB</option>
+            </select>
+
+            <label for="almacenamiento">Almacenamiento:</label>
+            <select id="almacenamiento" required>
+                <option value="1TB HDD">1TB HDD</option>
+                <option value="512GB SSD">512GB SSD</option>
+                <option value="1TB SSD">1TB SSD</option>
+            </select>
+
+            <label for="tarjeta-grafica">Tarjeta Gráfica:</label>
+            <select id="tarjeta-grafica" required>
+                <option value="NVIDIA GTX 1650">NVIDIA GTX 1650</option>
+                <option value="NVIDIA RTX 3050">NVIDIA RTX 3050</option>
+                <option value="AMD RX 580">AMD RX 580</option>
+            </select>
+
+            <label for="envio">Servicio de Envío:</label>
+            <select id="envio" required>
+                <option value="Estándar">Estándar</option>
+                <option value="Express">Express</option>
+                <option value="Retiro en Tienda">Retiro en Tienda</option>
+            </select>
+
+            <div id="map"></div>
+            <button type="submit">Crear Configuración</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 PCsnapBuild. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        // Función para inicializar el mapa de Google Maps
+        function initMap() {
+            const mapOptions = {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 6,
+            };
+            const map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.placeholder = 'Buscar dirección';
+            map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+            const autocomplete = new google.maps.places.Autocomplete(input);
+            autocomplete.bindTo('bounds', map);
+            autocomplete.addListener('place_changed', function () {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) return;
+
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            });
+        }
+
+        // Cargar Google Maps y inicializar
+        window.onload = function() {
+            initMap();
+        }
+
+        // Manejar envío del formulario
+        document.getElementById('armado-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const presupuesto = document.getElementById('presupuesto').value;
+            const necesidades = document.getElementById('necesidades').value;
+            const procesador = document.getElementById('procesador').value;
+            const memoria = document.getElementById('memoria').value;
+            const almacenamiento = document.getElementById('almacenamiento').value;
+            const tarjetaGrafica = document.getElementById('tarjeta-grafica').value;
+            const envio = document.getElementById('envio').value;
+
+            // Redirigir a la página de pedido con los datos como parámetros en la URL
+            window.location.href = `pedido-en-proceso.html?presupuesto=${presupuesto}&procesador=${procesador}&memoria=${memoria}&almacenamiento=${almacenamiento}&tarjetaGrafica=${tarjetaGrafica}&envio=${envio}`;
+        });
+    </script>
+</body>
+</html>
